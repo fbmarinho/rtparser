@@ -1,0 +1,51 @@
+* {
+  font-family:'Courier New', Courier, monospace;
+  font-size: 12px;
+}
+body{
+  background-color: #eee;
+}
+.pre {
+  tab-size: 4;
+  background-color: white;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+span {
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.disabled {
+  background-color: #aaa;
+}
+
+.copy, table {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+.copied {
+  animation: bg 1.2s ease-in-out;
+}
+
+.copied::after{
+  float: right;
+  display: block;
+  content: "Copiado para área de transferência !";
+  position: relative;
+  width: fit-content;
+  padding: 10px;
+  background-color: green;
+  color: white;
+  border-radius: 3px;
+  margin-top: -30px;
+}
+
+@keyframes bg {
+  from {background-color: white;}
+  50% {background-color: #afa;}
+  to {background-color: white;}
+}
