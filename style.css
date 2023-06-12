@@ -5,11 +5,38 @@
 body{
   background-color: #eee;
 }
+
+#containers {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .pre {
   tab-size: 4;
   background-color: white;
   border: 1px solid black;
-  padding: 10px;
+  padding: 4px;
+}
+
+table {
+  width: 100%;
+}
+tr::before{
+  content: "" attr(data-index)
+}
+tr:nth-of-type(odd){
+  background-color: #00000010;
+
+}
+td.name{
+  width: 50%;
+}
+td.serial{
+  width: 20%;
+}
+td.comments{
+  width: 30%;
 }
 
 span {
