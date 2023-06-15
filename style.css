@@ -23,12 +23,13 @@ body{
 #containers {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 15px;
 }
 
 .pre {
   background-color: white;
   border: 1px solid black;
+  box-shadow: #5559 0px 2px 5px;
 }
 
 table {
@@ -106,8 +107,8 @@ tr:nth-of-type(odd){
   color: white
 }
 .sub_header{
-  background-color:#CCC !important;
-  color: #555;
+  background-color:#999 !important;
+  color: white;
   height: 16px;
 }
 .container{
