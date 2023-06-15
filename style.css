@@ -1,7 +1,21 @@
 * {
   font-family:'Courier New', Courier, monospace;
   font-size: 12px;
+  margin: 0;
+  box-sizing: border-box;
+  border-spacing: 0;
 }
+
+body {
+  padding: 10px;
+}
+
+tr{
+  display: flex;
+  align-items: center;
+  padding: 2px;
+}
+
 body{
   background-color: #eee;
 }
@@ -13,10 +27,8 @@ body{
 }
 
 .pre {
-  tab-size: 4;
   background-color: white;
   border: 1px solid black;
-  padding: 4px;
 }
 
 table {
@@ -29,14 +41,87 @@ tr:nth-of-type(odd){
   background-color: #00000010;
 
 }
-td.name{
-  width: 50%;
-}
-td.serial{
+
+/* CONTAINER TABLE */
+.descricao{
+  text-align: left;
   width: 20%;
 }
-td.comments{
-  width: 30%;
+.numero{
+  text-align: center;
+  width: 10%;
+}
+.dimensoes{
+  text-align: center;
+  width: 10%;
+}
+.peso{
+  text-align: center;
+  width: 10%;
+}
+.data_tc{
+  text-align: center;
+  width: 10%;
+}
+.venc_tc{
+  text-align: center;
+  width: 10%;
+}
+.sn_eslinga{
+  text-align: center;
+  width: 10%;
+}
+.data_inspecao{
+  text-align: center;
+  width: 10%;
+}
+.venc_inspecao{
+  text-align: center;
+  width: 10%;
+}
+
+/* ITEMS TABLE */
+.item{
+  text-align: left;
+  width: 20%;
+}
+.virtual{
+  text-align: center;
+  width: 20%;
+}
+.serial{
+  text-align: center;
+  width: 20%;
+}
+.peso_item{
+  text-align: center;
+  width: 20%;
+}
+.valor{
+  text-align: center;
+  width: 20%;
+}
+.table_header{
+  background-color: #555 !important;
+  color: white
+}
+.sub_header{
+  background-color:#CCC !important;
+  color: #555;
+  height: 16px;
+}
+.container{
+  background-color: white ;
+  height: 26px;
+}
+
+.footer{
+  display: flex;
+  justify-content: end;
+  background-color: #CCC;
+  font-size: 10px;
+  padding: 4px;
+  height: 16px;
 }
 
 span {
@@ -49,26 +134,27 @@ span {
 }
 
 .copy, table {
+  cursor: pointer;
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
 
 .copied {
-  animation: bg 1.2s ease-in-out;
+  animation: bg 0.6s ease-in-out;
 }
 
 .copied::after{
-  float: right;
   display: block;
   content: "Copiado para área de transferência !";
-  position: relative;
+  position: absolute;
   width: fit-content;
   padding: 10px;
-  background-color: green;
+  background-color: green!important;
   color: white;
   border-radius: 3px;
-  margin-top: -30px;
+  bottom: 20px;
+  right: 20px;
 }
 
 @keyframes bg {
