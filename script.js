@@ -2,8 +2,7 @@ HTMLCollection.prototype.forEach = Array.prototype.forEach;
 
 function copyToClipboard(e) {
   navigator.clipboard.writeText(e.innerHTML);
-  console.log("Copied: "+ e.innerHTML);
-  e.classList.add("copied");
+  e.classList.add("copied")
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -14,22 +13,30 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-document.getElementById("fileInput").addEventListener('change', handleFile, false);
+document.getElementById("fileInput").addEventListener('change', handleFiles, false);
 
 function handleFile() {
   const reader = new FileReader();
   reader.readAsDataURL(this.files[0]);
   reader.onload = (e) => parsePDF(e.target.result);
 }
+//Get Div placeholder for the containers
+var containers = document.getElementById("containers")
 
-async function parsePDF(url) {
+function handleFiles() {
+  const files = [...this.files];
+  containers.innerHTML = "";
+  files.forEach((file)=>{
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (e) => parsePDF(e.target.result, file.name);
+  })
+}
+
+async function parsePDF(url, filename) {
 
   const loadingTask = pdfjsLib.getDocument({ url });
   const pdfDocument = await loadingTask.promise;
-
-  //Get Div placeholder for the containers
-  var containers = document.getElementById("containers")
-  containers.innerHTML = "";
 
   console.log("Number of Pages to process:",pdfDocument.numPages);
 
@@ -37,33 +44,37 @@ async function parsePDF(url) {
 
   //Iterate over pages
   for (let pageNumber = 1; pageNumber<=parseInt(pdfDocument.numPages); pageNumber++){
-    console.log("Page #",pageNumber);
+    console.log("Processing Page #",pageNumber);
     const page = await pdfDocument.getPage(pageNumber);
     const textContent = await page.getTextContent();
-    console.log(textContent)
+    
+    // DEBUG 
+    // console.log(textContent) 
+
+    //Check if it is a valid RT
+    const isRT = textContent.items.find((item)=>item.str == "Nr. RT / Tipo RT");
+    if(!isRT){
+      document.getElementById("containers").appendChild(createErrorBoxWithText(`${filename} não é uma RT no formato padrão.`))
+      return false;
+    }
+    
     const startIndex = textContent.items.findIndex((item)=>item.str == "DETALHAMENTO DA EMBALAGEM")
     const endIndex = textContent.items.findIndex((item)=>item.str == "COMENTÁRIOS")
-
-    //console.log(startIndex, endIndex)
 
     //Scan for header
     let rt_number_index = textContent.items.findIndex((item)=>item.str == "Nr. RT / Tipo RT")
     let rt_number = textContent.items[rt_number_index + 18].str.split(" ")[0];
     rt_number = isRtNumber(rt_number) ? rt_number : "Not recognized";
-    console.log(rt_number);
 
     let descricao_index = textContent.items.findIndex((item)=>item.str == "Descrição")
     let descricao = parseContainerFromString(textContent.items[descricao_index + 8].str);
-    console.log(descricao);
 
     let dimensions_index = textContent.items.findIndex((item)=>item.str == "Dimensões C x L x A (m)")
     let dimentions = formatDimensions(textContent.items[dimensions_index + 8].str);
-    console.log(dimentions);
 
     let peso_total_index = textContent.items.findIndex((item)=>item.str == "Peso Total")
     let peso_total = textContent.items[peso_total_index + 10].str;
     peso_total = formatPeso(peso_total);
-    console.log("Peso total", peso_total);
 
     //Scanning Observacoes
     let obs_index = textContent.items.findIndex((item)=>item.str == "Observações")
@@ -73,20 +84,17 @@ async function parsePDF(url) {
     }
     obs_text = obs_text.filter((str)=>str != " " && str != '' && str != ".");//Remove white spaces.
     obs_text = obs_text.reduce((acc,obj)=>[...acc, ...obj.split(":")]);
-    console.log(obs_text);
 
     let sling_index = obs_text.findIndex((str)=>str.toLowerCase().includes("sling"));
     let sling_number = descricao.sling || obs_text[sling_index + 1] || "N/A";
-    console.log(sling_index, sling_number)
 
     let vencimentos = parseVencimentos(obs_text);
-    console.log(vencimentos);
-    
 
     let peso_items = 0;
     let peso_container = 0;
 
     let items_lines = [];
+
     //Scanning for items
     for (let i = startIndex+12; i<=endIndex-16;i=i+16){
       let indice = parseInt(textContent.items[i].str);
@@ -224,7 +232,7 @@ function parseToolFromString(str){
     if(isSerialNumber(s)) tool.serial = s
     if(isVirtualString(s)) tool.virtual = s
   })
-  // console.log(tool)
+
   return tool;
 }
 
@@ -235,7 +243,7 @@ function isText(str){
 function parseContainerFromString(str){
   console.log("Parsing container...")
   let splitted = str.replace(": "," ").replace(":","").trim().split(" ");
-  console.log("Initial:", str, splitted)
+
   let terms = [];
   splitted.forEach((element) => {
     if(!isText(element)) {
@@ -244,7 +252,7 @@ function parseContainerFromString(str){
       terms.push(element);
     }
   });
-  console.log(terms)
+
   if (terms.length == 1){
     return {
       name: normalizeContainerName(terms[0].trim()),
@@ -339,4 +347,11 @@ function subtractDays(date, days) {
 
 function prettyDate(date){
   return date instanceof Date ? date.toLocaleDateString("pt-BR") : "N/A";
+}
+
+function createErrorBoxWithText(text){
+  const div = document.createElement("div");
+  div.classList.add("error-box");
+  div.innerText = text;
+  return div;
 }

@@ -9,8 +9,7 @@ document.addEventListener("DOMContentLoaded",()=>{
       e.preventDefault();
       e.stopPropagation();
     });
-  });
-
+  })
 
   dropzone.onclick = function(){
     fileInput.click();
@@ -28,30 +27,28 @@ document.addEventListener("DOMContentLoaded",()=>{
   dropzone.ondrop = function(e){
     var files = e.dataTransfer.files;
     var dt = new DataTransfer();
-    console.log(files);
+
     Array.prototype.forEach.call(files, file => {
-      console.log(file);
-      dt.items.add(file);
+      dt.items.add(file)
     });
-    console.log(dt.files)
+
     var filestobeadded = dt.files;
-    console.log(filestobeadded)
+
     fileInput.files = filestobeadded;
     fileInput.dispatchEvent(new Event('change'));
   }
   
   fileInput.onchange = function(){
-    var file = this.files[0];
+    var files = [...this.files];
     var accept = this.accept;
-    dropzone.classList.remove("hover","error");
+    dropzone.classList.remove("hover");
 
-    if (accept && accept!=file.type) {
-      alert(`Tipo não permitido, apenas o formato PDF é aceito.`);
-      return false;
-    }
+    files.forEach((file)=>{
+      if (accept && accept!=file.type) {
+        document.getElementById("containers").appendChild(createErrorBoxWithText(`${file.name} não foi reconhecido, use o formato PDF.`))
+      }
+    })
 
     dropzone.classList.add("dropped");
-
-    //alerts.innerHTML = `Processando ${file.name}`;
-  }
+  };
 });
