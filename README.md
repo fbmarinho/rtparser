@@ -1,4 +1,6 @@
-# RT Parser
-Processador de PDF de requisição de transporte
+# RT Scanner
+Uma aplicação para extrair informações tabuladas em um PDF padrão de forma automatica e disponibiliza-las para serem coladas de forma prática no EXCEL.
 
-Retorna um texto formatado com os items do PDF
+Desenvolvida em HTML, Javascript e CSS.
+
+Bibliotecas utilizadas: PDF.js
