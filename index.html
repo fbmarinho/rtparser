@@ -6,17 +6,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="dropzone.css">
-  <title>RT Parser</title>
+  <title>RT Scanner</title>
 </head>
 <script src="dropzone.js"></script>
 <script src="pdfjs/pdf.js"></script>
 <body>
+  <header>
+    <div>
+      <h1>RT Scanner</h1>
+      <span>Arraste os arquivos para a área ao lado ou clique para escolher um arquivo</span>
+    </div>
+
     <div id="dropzone">
-      <div id="visualaid">Clique ou arraste a RT para esta área para carregar o arquivo</div>
+      <div id="visualaid">
+        <img src="/images/download.svg" height="35" width="35"><span>Dropzone</span>
+      </div>
       <input type="file" id="fileInput" accept="application/pdf">
     </div>
-    <div id="containers"></div>
- 
+  </header>
+  
+  <div id="containers"></div>
   <script src="script.js"></script>
 </body>
 </html>

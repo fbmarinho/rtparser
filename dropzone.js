@@ -46,13 +46,12 @@ document.addEventListener("DOMContentLoaded",()=>{
     dropzone.classList.remove("hover","error");
 
     if (accept && accept!=file.type) {
-      alerts.innerHTML = `Tipo não permitido, apenas o formato PDF é aceito.`;
-      dropzone.classList.add("error");
+      alert(`Tipo não permitido, apenas o formato PDF é aceito.`);
       return false;
     }
 
     dropzone.classList.add("dropped");
 
-    alerts.innerHTML = `Processando ${file.name}`;
+    //alerts.innerHTML = `Processando ${file.name}`;
   }
 });
