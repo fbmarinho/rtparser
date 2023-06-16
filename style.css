@@ -24,6 +24,7 @@ header{
   height:140px;
   position: fixed;
   top: 0px;
+  gap: 10px;
 }
 
 header div{
@@ -226,4 +227,19 @@ span {
   position: fixed;
   top: 140px;
   box-shadow: #3339 0px 5px 10px;
+}
+
+#clear-button {
+  flex: 0.08;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff1;
+  height: 100%;
+  border-radius: 10px;
+}
+
+#clear-button:hover {
+  cursor: pointer;
+  background-color: #ffffff21;
 }

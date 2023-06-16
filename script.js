@@ -13,6 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+document.getElementById("clear-button").onclick = function(){
+  containers.innerHTML = "";
+}
+
 document.getElementById("fileInput").addEventListener('change', handleFiles, false);
 
 function handleFile() {
