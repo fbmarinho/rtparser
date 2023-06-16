@@ -2,7 +2,6 @@ HTMLCollection.prototype.forEach = Array.prototype.forEach;
 
 function copyToClipboard(e) {
   navigator.clipboard.writeText(e.innerHTML);
-  e.classList.add("copied")
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -44,7 +43,7 @@ async function parsePDF(url, filename) {
 
   console.log("Number of Pages to process:",pdfDocument.numPages);
 
-  var today = new Date(Date.now()).toLocaleDateString("pt-BR",{});
+  var today = new Date(Date.now());
 
   //Iterate over pages
   for (let pageNumber = 1; pageNumber<=parseInt(pdfDocument.numPages); pageNumber++){
@@ -111,6 +110,9 @@ async function parsePDF(url, filename) {
 
     peso_container = peso_total - peso_items;
 
+
+
+
     let container_header = ''
     container_header+= `<table>`;
     container_header+= `<tr class="table_header">`;
@@ -127,7 +129,7 @@ async function parsePDF(url, filename) {
     container_header+= `</table>`;
 
     let container_table = '';
-    container_table+= `<div class="copy"><table>`;
+    container_table+= `<table>`;
     container_table+= `<tr class="container">`;
     container_table+= `<td class="descricao">${descricao.name}</td>`;
     container_table+= `<td class="numero">${descricao.number}</td>`;
@@ -139,7 +141,7 @@ async function parsePDF(url, filename) {
     container_table+= `<td class="data_inspecao">${prettyDate(vencimentos.data_inspecao)}</td>`;
     container_table+= `<td class="venc_inspecao">${prettyDate(vencimentos.venc_inspecao)}</td>`;
     container_table+= `</tr>`;
-    container_table+= `</table></div>`;
+    container_table+= `</table>`;
 
     let items_header = ''
     items_header+= `<table>`;
@@ -152,7 +154,8 @@ async function parsePDF(url, filename) {
     items_header+= `</tr>`;
     items_header+= `</table>`;
 
-    let item_tr = ''
+    let item_tr = '';
+    let formato_mr = '';
     items_lines.forEach((i)=>{
       item_tr+= `<tr data-index="${i.indice}">`;
       item_tr+= `<td class="item">${i.name}</td>`;
@@ -161,23 +164,58 @@ async function parsePDF(url, filename) {
       item_tr+= `<td class="peso_item">${i.peso}</td>`;
       item_tr+= `<td class="valor">${i.valor}</td>`;
       item_tr+= `</tr>`;
+      formato_mr+= `<tr>`;
+      formato_mr+= `<td>${descricao.name}</td>`;
+      formato_mr+= `<td>${descricao.number}</td>`;
+      formato_mr+= `<td>${dimentions.c} x ${dimentions.l} x ${dimentions.a}</td>`;
+      formato_mr+= `<td>${peso_container}</td>`;
+      formato_mr+= `<td>${prettyDate(vencimentos.data_tc)}</td>`;
+      formato_mr+= `<td>${prettyDate(vencimentos.venc_tc)}</td>`;
+      formato_mr+= `<td>${sling_number}</td>`;
+      formato_mr+= `<td>${prettyDate(vencimentos.data_inspecao)}</td>`;
+      formato_mr+= `<td>${prettyDate(vencimentos.venc_inspecao)}</td>`;
+      formato_mr+= `<td>${i.name} ${i.virtual?i.virtual:""}</td>`;
+      formato_mr+= `<td>${i.serial?i.serial:"N/A"}</td>`;
+      var comments = [
+        '(',
+        rt_number?'RT: '+rt_number:'',
+        '/',
+        i.peso?i.peso+' Kg':'',
+        '/',
+        i.valor?'R$ '+i.valor:'',
+        ')'
+      ];
+      formato_mr+= `<td>${comments.join(" ")} Upd: ${prettyDate(today)}</td>`;
+      formato_mr+= `</tr>`;
     })
 
     let items_table = '';
-    items_table+= `<div class="copy">`;
     items_table+= `<table style='white-space: nowrap'>`;
     items_table+= item_tr;
     items_table+= `</table>`;
-    items_table+= `</div>`;
+
+    let formato_mr_table = '';
+    formato_mr_table+= `<table id="mr-format" style='white-space: nowrap'>`;
+    formato_mr_table+= formato_mr;
+    formato_mr_table+= `</table>`;
+
+    let menu = "";
+    menu+= `<div id="menu">`;
+    menu+= `Formatos para copiar e colar:  <button class="mr-format">MR</button>`;
+    menu+= `</div>`;
+
 
     let footer = "";
-    footer+= `<div class="footer">RT: ${rt_number}</div>`;
+    footer+= `<div class="footer">${formato_mr_table}</div>`;
+
+    
 
     //Create div for individual baskets
     var container = document.createElement("div");
     container.classList.add("pre");
-    container.innerHTML = container_header+container_table+items_header+items_table;
+    container.innerHTML = container_header+container_table+items_header+items_table+menu+footer;
     containers.appendChild(container);
+
     
     page.cleanup();
   }
@@ -197,9 +235,13 @@ function isSerialNumber(str){
 }
 
 function updateListeners(){
-  document.getElementsByClassName("copy").forEach((element)=>{
-    element.addEventListener("click",() => copyToClipboard(element),false);
-    element.addEventListener("animationend",() => element.classList.remove('copied'),false);
+  document.getElementsByClassName("mr-format").forEach((element)=>{
+    var pre = element.parentElement.parentElement;
+    element.addEventListener("click",() => {
+      pre.classList.add("copied");
+      copyToClipboard(pre.lastChild);
+    },false);
+    pre.addEventListener("animationend",() => pre.classList.remove('copied'),false);
   },false)
 }
 

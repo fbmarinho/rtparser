@@ -58,13 +58,15 @@ body{
 #containers {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 30px;
   padding: 10px;
   margin-top: 160px;
 }
 
 
 .pre {
+  display: flex;
+  flex-direction: column;
   background-color: white;
   border: 1px solid black;
   box-shadow: #5559 0px 2px 5px;
@@ -163,12 +165,7 @@ tr:nth-of-type(odd){
 }
 
 .footer{
-  display: flex;
-  justify-content: end;
-  background-color: #CCC;
-  font-size: 10px;
-  padding: 4px;
-  height: 16px;
+  display: none;
 }
 
 span {
@@ -181,18 +178,14 @@ span {
 }
 
 .copy, table {
-  cursor: pointer;
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
 
 .copied {
-  animation: bg 0.6s ease-in-out;
-}
-
-.error-box{
-
+  animation: bg 1s ease-in-out;
+  outline-offset: -1px;
 }
 
 .copied::after{
@@ -209,9 +202,9 @@ span {
 }
 
 @keyframes bg {
-  from {background-color: white;}
-  50% {background-color: #afa;}
-  to {background-color: white;}
+  from {outline: 1px solid #a00;}
+  50% {outline: 4px solid green;}
+  to {outline: 1px solid #a00;}
 }
 
 .disclaimer {
@@ -242,4 +235,38 @@ span {
 #clear-button:hover {
   cursor: pointer;
   background-color: #ffffff21;
+}
+
+#menu{
+  background-color: transparent;
+  height: 30px;
+  color: #ccc;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 9px;
+  font-weight: bold;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  padding-right: 4px;
+  margin-bottom: -30px;
+}
+
+#menu button {
+  background-color: transparent;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #ccc;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 8px;
+  font-weight: bold;
+  height: 20px;
+  width: 30px;
+  text-align: center;
+}
+#menu button:hover {
+  background-color: #0001;
+  border: 2px solid #a00;
+  cursor: pointer;
 }
